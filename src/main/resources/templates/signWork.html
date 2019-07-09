@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8"/>
+    <title>签到</title>
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.js"></script>
+    <!--<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>-->
+    <script src="/js/angular.min.js"></script>
+
+    <!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
+    <script src="/js/bootstrap.min.js"></script>
+    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+</head>
+<body ng-controller="signCtrl">
+
+<div id="messagetext" class="well text-center" ng-show="message.length>0">{{message}}</div>
+<button class="btn btn-danger col-lg-offset-5" ng-click="getWarn()">查看超过四小时</button>
+<div style="height: 20px" class="col-md-12"></div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+    <tr>
+        <th>序号</th>
+        <th>姓名</th>
+        <th>签到</th>
+        <th>签退</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="member in members">
+        <td>{{$index+1}}</td>
+        <td>{{member.name}}</td>
+        <td>
+            <button class="btn btn-info col-lg-offset-2" ng-show="member.isstart==0" ng-click="start(member)">签到
+            </button>
+        </td>
+        <td>
+            <button class="btn btn-danger col-lg-offset-2" ng-show="member.isstart==1" ng-click="end(member)">签退
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <table class="table table-bordered table-striped">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>姓名</th>
+                        <th>已签到时间</th>
+                        <th>签退</th>
+
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="info in infos">
+                        <td>{{$index+1}}</td>
+                        <td>{{info.name}}</td>
+                        <td>
+                            {{info.time}}
+                        </td>
+                        <td>
+                            <button class="btn btn-danger col-lg-offset-2" ng-click="endForWarn(info.name)"
+                                    ng-model="info.name">签退
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger col-lg-offset-4" ng-click="onceEnd()">一键重签</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript">
+
+    function myrefresh() {
+        window.location.reload();
+    }
+    setTimeout('myrefresh()', 3600000);
+
+</script>
+
+<script type="application/javascript">
+    var app = angular.module('myApp', []);
+    app.controller('signCtrl', function ($scope, $http, $interval) {
+        $scope.fetchUsersList = function () {
+            $http.get("/sign/name")
+                    .success(function (members) {
+                        $scope.members = members;
+                    });
+            $scope.message = "请按时签到签退";
+        };
+        $scope.fetchUsersList();
+
+        var callAtTimeout = function () {
+            $http.get("/sign/getWarn")
+                    .success(function (infos) {
+                        $scope.infos = infos;
+                        if ($scope.infos.length > 0) {
+                            $('#myModal').modal('show');
+                        } else {
+                            alert("没有人超过四小时");
+                        }
+                    });
+        };
+
+        $scope.infos = "";
+        $scope.getWarn = function () {
+            $http.get("/sign/getWarn")
+                    .success(function (infos) {
+                        $scope.infos = infos;
+                        if ($scope.infos.length > 0) {
+                            $('#myModal').modal('show');
+                        } else {
+                            alert("没有人超过四小时");
+                        }
+                    });
+        };
+
+        $interval(callAtTimeout, 60 * 60 * 1000);
+
+
+        $scope.onceEnd = function () {
+            $http.get("/sign/onceEnd")
+                    .success(function (message) {
+                        alert(message);
+                        window.location.reload();
+                    });
+        };
+
+
+        $scope.start = function (member) {
+            $http.post("/sign/start", member.name)
+                    .success(function (message) {
+//                        $scope.fetchUsersList();
+                        //这样就不用签到或者签退后再刷新一次。
+                        member.isstart = 1;
+                        $scope.message = message;
+                        alert(message);
+                    });
+        };
+
+        $scope.end = function (member) {
+            $http.post("/sign/end", member.name)
+                    .success(function (message) {
+//                        $scope.fetchUsersList();
+                        //这样就不用签到或者签退后再刷新一次。
+                        member.isstart = 0;
+                        $scope.message = message;
+                        alert(message);
+                    });
+        };
+
+        $scope.endForWarn = function (name) {
+            $http.post("/sign/end", name)
+                    .success(function (message) {
+                        $scope.message = message;
+                        alert(message);
+                        window.location.reload();
+                    });
+        };
+    });
+</script>
+</body>
+</html>
