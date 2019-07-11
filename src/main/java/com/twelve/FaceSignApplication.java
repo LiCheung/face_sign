@@ -9,11 +9,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
 @EnableScheduling
+@EnableAutoConfiguration
 public class FaceSignApplication extends SpringBootServletInitializer{
     /* public static void main(String[] args) {
 		SpringApplication.run(FaceSignApplication.class, args);
 	}*/
-	public static void main(String[] args) {
+    private static Class<FaceSignApplication> applicationClass = FaceSignApplication.class;
+
+    public static void main(String[] args) {
         SpringApplication.run(applicationClass, args);
     }
 
@@ -21,6 +24,4 @@ public class FaceSignApplication extends SpringBootServletInitializer{
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(applicationClass);
     }
-
-    private static Class<FaceSignApplication> applicationClass = FaceSignApplication.class;
 }

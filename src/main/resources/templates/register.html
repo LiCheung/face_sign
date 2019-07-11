@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="x-ua-compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+
+    <title>用户注册</title>
+    <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css"/>
+</head>
+<body>
+
+<div style="height: 100px;width: 200%"></div>
+
+<form name="form" class="col-md-4 col-md-offset-4" th:action="@{/member/register}" method="POST"> <!-- 3 -->
+    <div class="form-group">
+        <input type="text" id="用户名" class="form-control" name="names" placeholder="用户名"/>
+    </div>
+    <div class="form-group">
+        <input type="text" id="newpwd1" class="form-control" name="newpwd1" placeholder="密码"/>
+    </div>
+    <div class="form-group">
+        <input type="text" id="newpwd2" class="form-control" name="newpwd2"
+               placeholder="再次输入密码"/>
+    </div>
+    <div class="form-group">
+        <input type="text" id="stu_id" class="form-control" name="stu_id"
+               placeholder="学号"/>
+    </div>
+    <div class="form-group">
+        <input type="text" id="grade" class="form-control" name="grade"
+               placeholder="年级"/>
+    </div>
+    <div class="form-group">
+        <button type="submit" id="register" class="btn btn-primary">提交</button>
+    </div>
+</form>
+</body>
+</html>

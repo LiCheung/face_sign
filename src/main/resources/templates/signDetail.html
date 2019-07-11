@@ -19,6 +19,7 @@
         <p class="navbar-text col-lg-5">Welcome: <span id="span1" sec:authentication="name"></span></p>
         <li role="presentation"><a th:href="@{/buqian/showReviewPage}" sec:authorize="hasAnyAuthority('SUPER_ADMIN')">补签审核</a></li>
         <li role="presentation"><a th:href="@{/excelout}" sec:authorize="hasAnyAuthority('SUPER_ADMIN')">签到信息导出</a></li>
+        <li role="presentation"><a th:href="@{/registe}" sec:authorize="hasAnyAuthority('SUPER_ADMIN')">新成员注册</a></li>
         <li role="presentation"><a th:href="@{/sign}" sec:authorize="hasAnyAuthority('SIGN')">签到页</a></li>
         <li role="presentation"><a th:href="@{/setpwd}">修改密码</a></li>
         <li role="presentation"><a th:href="@{/logout}">退出</a></li>

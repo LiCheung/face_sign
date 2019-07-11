@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <title>Title</title>
+</head>
+<body>
+<!--<span id="cutPhotoBtn">
+        拍照
+    </span>-->
+<button type="button" class="btn btn-primary" id="cutPhotoBtn" ng-click="initPcCameraAndCut(videoCanvasWrapper)">拍照</button>
+<div class="wrapper" id="videoCanvasWrapper"></div>
+
+<script th:src="@{/js/pcCameraCtrl.js}"></script>
+<!--<script src="js/pcCameraCtrl.js"></script>-->
+<script type="text/javascript">
+    // demo
+    initPcCameraAndCut('videoCanvasWrapper').then(function (vcObj) {
+        console.log(vcObj)
+        document.getElementById('cutPhotoBtn').addEventListener('click', function () {
+            console.log(vcObj.cutImgFn())
+        })
+    })
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+<!DOCTYPE html>
+<html>
+<head>
+    <title>getUserMedia示例</title>
+    <style>
+        video {
+            object-fit: cover;
+        }
+
+        @media (min-width: 1000px) {
+            video {
+                height: 480px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+WebRTC 影像測試
+<br />問題：https://ithelp.ithome.com.tw/questions/10192363
+<hr />
+<video autoplay playsinline></video>
+<script >
+    'use strict';
+
+    var constraints = {
+        video: true
+    };
+
+    var video = document.querySelector('video');
+
+    function handleSuccess(stream) {
+        window.stream = stream; // only to make stream available to console
+        video.srcObject = stream;
+    }
+
+    function handleError(error) {
+        console.log('getUserMedia error: ', error);
+    }
+
+    navigator.mediaDevices.getUserMedia(constraints).
+    then(handleSuccess).catch(handleError);
+</script>
+</body>
+
+</html>-->

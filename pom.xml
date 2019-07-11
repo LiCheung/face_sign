@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -22,7 +22,7 @@
 		<java.version>1.8</java.version>
 		<warPackageName>FaceSign</warPackageName>
 		<tomcat.deploy.server>localTestServer</tomcat.deploy.server>
-		<tomcat.deploy.serverUrl>http://localhost:8080/manager/text</tomcat.deploy.serverUrl>
+		<tomcat.deploy.serverUrl>http://211.159.187.251:8080/manager/text</tomcat.deploy.serverUrl>
 	</properties>
 
 
@@ -128,7 +128,7 @@
 			<id>deploy2production</id>
 			<properties>
 				<tomcat.deploy.server>productionServer</tomcat.deploy.server>
-				<tomcat.deploy.serverUrl>http://localhost:8080/manager/text</tomcat.deploy.serverUrl>
+				<tomcat.deploy.serverUrl>http://211.159.187.251:8080/manager/text</tomcat.deploy.serverUrl>
 			</properties>
 		</profile>
 	</profiles>

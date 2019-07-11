@@ -1,0 +1,27 @@
+<!DOCTYPE html> 
+<html>  
+  <head>  
+        <meta charset="UTF-8" />  
+        <title>H5调用摄像头</title>  
+        <style>
+              #canvas,#video {
+                        float: left;
+                        margin-right: 10px;
+                        background: #fff;
+                        }     .box {
+                                      overflow: hidden;
+                                      margin-bottom: 10px;
+                                  }
+            </style>
+      </head>  
+  <body>  
+    <div class="box">
+          <video id="video" width="400" height="300"></video>
+          <canvas id="canvas" width="400" height="300"></canvas>
+        </div>
+    <button id="live">直播</button>
+    <button id="snap" href="G:\\test">拍照</button>
+    <script src="/js/camera.js">
+</script>  
+  </body> 
+</html>

@@ -1,5 +1,6 @@
 package com.twelve.controller;
 
+import com.twelve.model.login.Member;
 import com.twelve.repository.MemberRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,4 +36,21 @@ public class MemberCrol {
     }
 
 
+    @RequestMapping("/member/register")
+    public String saveMember(@RequestParam String names,
+                             @RequestParam String newpwd1,
+                             @RequestParam String newpwd2,
+                             @RequestParam Long stu_id,
+                             @RequestParam Integer grade) {
+        if (newpwd1.equals(newpwd2)) {
+            Member member = new Member();
+            member.setName(names);
+            member.setPwd(newpwd1);
+            member.setStuId(stu_id);
+            member.setGrade(grade);
+            member.setIsstart(0);
+            memberRepo.save(member);
+        }
+        return "redirect:/signDetail";
+    }
 }

@@ -20,6 +20,17 @@ public class IndexCrol {
         return "pwd";
     }
 
+    @RequestMapping("/registe")
+    public String register() {return "register";}
+
+
+    @RequestMapping("/demo")
+    public String demo() {return "demo";}
+
+
+    @RequestMapping("/camera")
+    public String camera() {return "camera";}
+
     /*@RequestMapping("/sign")
     public String signwork() {
         return "signWork";

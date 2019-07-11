@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><head>
+        <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+        <title>弹出登录框的实现代码</title>
+    </head>
+<body>
+<style type="text/css">
+    body {
+        margin: 0px;padding:0
+    }
+    #div1 {
+        display: none;
+        position: absolute;
+        z-index: 1000;
+        height: 100%;
+        width: 100%;
+        background: #000000;
+        filter:Alpha(opacity=30);
+    }
+    #div2 {
+        display: none;
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        padding-top: 10%;
+        z-index: 1001;
+        left: 0px;
+        top: 0px;
+    }
+</style>
+<script>
+    function openme(){
+        document.getElementById('div1').style.display='block';
+        document.getElementById('div2').style.display='block';
+    }
+    function closeme(){
+        document.getElementById('div1').style.display='none';
+        document.getElementById('div2').style.display='none';
+    }
+    function logo_in(){alert()
+//验证
+//转向...
+//myform.action=""
+//myform.submit()
+        closeme();
+    }
+</script>
+<div id="div1"></div>
+<div id="div2">
+    <table width="30%" border="0" cellpadding="3" cellspacing="1" style="background: #ff7300; position:static;filter:progid:DXImageTransform.Microsoft.DropShadow(color=#666666,offX=4,offY=4,positives=true)" align="center">
+        <tr id="m_tr">
+            <td><font color="#FFFFFF">欢迎登陆：</font></td>
+            <td align="right">
+                <input type="button" value="ｘ" onClick="closeme()" style="cursor: hand;">
+            </td>
+        </tr>
+        <tr>
+            <form name="myform" method="post" >
+                <td colspan="2" width="100%" bgcolor="#FFFFFF" height="150">
+                    username: <input type="text" name="username" size="10">
+                    <br>pasword:<input type="password" name="pasword" size="12">
+                    <br><input type="button" name="logoin" value="登陆" onClick="logo_in()">
+                    <input type="button" name="exit" value="取消" onClick="closeme()">
+                </td>
+            </form>
+        </tr>
+    </table>
+</div>
+<div>
+    <input name="button" type="button" onClick="openme()" value="登陆" />
+</div>
+<br>
+<div>
+    简单的代码
+</div>
+</body>
+</html><br /><center></title>
+</head>
+<body>
+
+</body>
+</html>
