@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="myApp">
 <head>
+
     <meta charset="UTF-8"/>
     <title>签到</title>
-    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.js"></script>
+    <script type="text/javascript" src="http://libs.baidu.com/jquery/1.9.1/jquery.js"></script>
     <!--<script src="http://apps.bdimg.com/libs/angular.js/1.4.6/angular.min.js"></script>-->
-    <script src="/js/angular.min.js"></script>
+    <script type="text/javascript" src="/js/angular.min.js"></script>
 
+    <script type="text/javascript" src="/js/pcCameraCtrl.js"></script>
+    <!--<script src="js/pcCameraCtrl.js"></script>-->
     <!--<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>-->
     <script src="/js/bootstrap.min.js"></script>
     <!--<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css"/>-->
@@ -33,8 +36,13 @@
         <td>{{$index+1}}</td>
         <td>{{member.name}}</td>
         <td>
-            <button class="btn btn-info col-lg-offset-2" ng-show="member.isstart==0" ng-click="start(member)">签到
+            <!--<button class="btn btn-info col-lg-offset-2" ng-show="member.isstart==0" ng-click="start(member)">签到
+            </button>-->
+            <button class="btn btn-info col-lg-offset-2" ng-show="member.isstart==0" data-toggle="modal" data-target="#myModal2" ng-click="setName(member.name)">签到
             </button>
+            <!--<div class="wrapper" id="videoCanvasWrapper"></div>-->
+            <!--<button class="btn btn-danger col-lg-offset-5" ng-click="getWarn()">查看超过四小时</button>
+            <div style="height: 20px" class="col-md-12"></div>-->
         </td>
         <td>
             <button class="btn btn-danger col-lg-offset-2" ng-show="member.isstart==1" ng-click="end(member)">签退
@@ -83,6 +91,32 @@
     </div>
 </div>
 
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">
+                    签到
+                </h4>
+            </div>
+            <div class="modal-body">
+                <div class="wrapper" id="videoCanvasWrapper"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭
+                </button>
+                <button type="button" id="cutPhotoBtn" ng-click="cutPhotoBtn()" data-dismiss="modal" class="btn btn-primary">
+                    提交
+                </button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal -->
+</div>
+
 <script type="application/javascript">
 
     function myrefresh() {
@@ -92,41 +126,53 @@
 
 </script>
 
+
+<script type="text/javascript">
+    // demo
+    var imgData = ''
+    var name = ''
+    var vc = ''
+    initPcCameraAndCut('videoCanvasWrapper').then(function (vcObj) {
+        console.log(vcObj)
+        vc = vcObj;
+    })
+</script>
+
 <script type="application/javascript">
     var app = angular.module('myApp', []);
     app.controller('signCtrl', function ($scope, $http, $interval) {
         $scope.fetchUsersList = function () {
             $http.get("/sign/name")
-                    .success(function (members) {
-                        $scope.members = members;
-                    });
+                .success(function (members) {
+                    $scope.members = members;
+                });
             $scope.message = "请按时签到签退";
         };
         $scope.fetchUsersList();
 
         var callAtTimeout = function () {
             $http.get("/sign/getWarn")
-                    .success(function (infos) {
-                        $scope.infos = infos;
-                        if ($scope.infos.length > 0) {
-                            $('#myModal').modal('show');
-                        } else {
-                            alert("没有人超过四小时");
-                        }
-                    });
+                .success(function (infos) {
+                    $scope.infos = infos;
+                    if ($scope.infos.length > 0) {
+                        $('#myModal').modal('show');
+                    } else {
+                        alert("没有人超过四小时");
+                    }
+                });
         };
 
         $scope.infos = "";
         $scope.getWarn = function () {
             $http.get("/sign/getWarn")
-                    .success(function (infos) {
-                        $scope.infos = infos;
-                        if ($scope.infos.length > 0) {
-                            $('#myModal').modal('show');
-                        } else {
-                            alert("没有人超过四小时");
-                        }
-                    });
+                .success(function (infos) {
+                    $scope.infos = infos;
+                    if ($scope.infos.length > 0) {
+                        $('#myModal').modal('show');
+                    } else {
+                        alert("没有人超过四小时");
+                    }
+                });
         };
 
         $interval(callAtTimeout, 60 * 60 * 1000);
@@ -134,42 +180,54 @@
 
         $scope.onceEnd = function () {
             $http.get("/sign/onceEnd")
-                    .success(function (message) {
-                        alert(message);
-                        window.location.reload();
-                    });
+                .success(function (message) {
+                    alert(message);
+                    window.location.reload();
+                });
         };
 
 
-        $scope.start = function (member) {
-            $http.post("/sign/start", member.name)
-                    .success(function (message) {
-//                        $scope.fetchUsersList();
-                        //这样就不用签到或者签退后再刷新一次。
-                        member.isstart = 1;
-                        $scope.message = message;
-                        alert(message);
-                    });
+        $scope.cutPhotoBtn = function () {
+            console.log('aaa')
+            imgData = vc.cutImgFn()
+            $http.post("/sign/start", {
+                name: name,
+                data: imgData
+            }).success(function (message) {
+                console.log(message)
+                        $scope.fetchUsersList();
+                    //这样就不用签到或者签退后再刷新一次。
+                    $scope.message = message;
+                    alert(message);
+                });
+        };
+        $scope.setName = function (memberName) {
+            console.log('name')
+
+            console.log(name)
+            name = memberName
+
+            console.log(name)
         };
 
         $scope.end = function (member) {
             $http.post("/sign/end", member.name)
-                    .success(function (message) {
+                .success(function (message) {
 //                        $scope.fetchUsersList();
-                        //这样就不用签到或者签退后再刷新一次。
-                        member.isstart = 0;
-                        $scope.message = message;
-                        alert(message);
-                    });
+                    //这样就不用签到或者签退后再刷新一次。
+                    member.isstart = 0;
+                    $scope.message = message;
+                    alert(message);
+                });
         };
 
         $scope.endForWarn = function (name) {
             $http.post("/sign/end", name)
-                    .success(function (message) {
-                        $scope.message = message;
-                        alert(message);
-                        window.location.reload();
-                    });
+                .success(function (message) {
+                    $scope.message = message;
+                    alert(message);
+                    window.location.reload();
+                });
         };
     });
 </script>

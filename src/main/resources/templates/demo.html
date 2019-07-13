@@ -2,6 +2,7 @@
 <html lang="en" ng-app="myApp" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
     <meta charset="UTF-8" />
     <title>Title</title>
 </head>
@@ -18,6 +19,7 @@
     // demo
     initPcCameraAndCut('videoCanvasWrapper').then(function (vcObj) {
         console.log(vcObj)
+        console.log(vcObj.cutImgFn())
         document.getElementById('cutPhotoBtn').addEventListener('click', function () {
             console.log(vcObj.cutImgFn())
         })

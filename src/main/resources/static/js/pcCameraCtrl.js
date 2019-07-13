@@ -1,4 +1,5 @@
 (function () {
+    var mediaDtreamTrack;
     // pc端浏览器控制摄像头类
     function PcCameraCtrl () {
         var _this = this
@@ -80,6 +81,8 @@
         })
     }
 
+
+
     // 实例化pc端摄像头并创建canvas对象实现拍照功能
     function initPcCameraAndCut (wrapperId, cut) {
         return new Promise(function (resolve) {
@@ -112,6 +115,7 @@
                 if (video.mozSrcObject !== undefined) {
                     //Firefox中，video.mozSrcObject最初为null，而不是未定义的，我们可以靠这个来检测Firefox的支持
                     video.mozSrcObject = stream;
+                    MediaStreamTrack=typeof stream.stop==='function'?stream:stream.getTracks()[1];
                 } else {
                     // 一般的浏览器需要使用createObjectURL对流数据进行处理，再交给video元素的src
                     try {
@@ -126,7 +130,7 @@
                 var  canvasT = setInterval(function() {
                     ctx.drawImage(videoEl,0,0,width,height)
                 }, 10)
-                Canvas2Image.saveAsPNG(canvasT);
+                /*Canvas2Image.saveAsPNG(canvasT);*/
 
                 resolve({
                     videoEl: videoEl,
@@ -139,9 +143,17 @@
                     }
                 })
 
+               /* document.getElementById('close').addEventListener('click', function () {
+                    video.mozSrcObject.stop()
+                })*/
             })
         })
     }
+
+    /*function stopcamera() {
+        mediaStreamTrack
+
+    }*/
 
     window.PcCameraCtrl = PcCameraCtrl
     window.initPcCameraAndCut = initPcCameraAndCut

@@ -20,7 +20,7 @@ public class IndexCrol {
         return "pwd";
     }
 
-    @RequestMapping("/registe")
+    @RequestMapping("/register")
     public String register() {return "register";}
 
 

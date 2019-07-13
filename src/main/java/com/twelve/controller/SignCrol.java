@@ -1,12 +1,20 @@
 package com.twelve.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.baidu.aip.face.AipFace;
+import com.baidu.aip.face.MatchRequest;
+import com.baidu.aip.util.Base64Util;
+import com.google.common.collect.Lists;
+import com.twelve.model.login.Member;
+import com.twelve.model.sign.Data;
 import com.twelve.model.sign.SignRecords;
 import com.twelve.repository.MemberRepo;
 import com.twelve.repository.SignRecordsRepo;
 import com.twelve.utils.DateUtil;
 import com.twelve.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.FileUtils;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,11 +23,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @Slf4j
@@ -66,15 +73,68 @@ public class SignCrol {
 
     @RequestMapping(value = "/start", produces = "application/text")
     @ResponseBody
-    public String sendStart(@RequestBody String name) {
+    public String sendStart(@RequestBody Data data) {
 
-        SignRecords signRecords = new SignRecords(name);
-        if (signRecordsRepo.save(signRecords) != null) {
-            signMemberRepo.setIsStart(name);
-            return name + "签到成功";
-        } else {
-            log.error(name + "签到失败");
-            return name + "签到失败，请重试";
+        System.out.println("aaaaac");
+        /*System.out.println(data.getName());
+
+        System.out.println(data.getData());*/
+        String name = data.getName();
+        Member member = signMemberRepo.findByName(name);
+
+        final String APP_ID = "16751944";
+        final String API_KEY = "5W53rSvUNgbFjQeIDGULsf2K";
+        final String SECRET_KEY = "HmQToe8eVzNGxuFSOlZeeXArHG4rUjLI";
+
+        AipFace client = new AipFace(APP_ID, API_KEY, SECRET_KEY);
+
+        String imgAddr = member.getPicAddr();
+        System.out.println("aaaaaaaaa"+imgAddr);
+        byte[] b1 = new byte[0];
+        try {
+            b1 = FileUtils.readFileToByteArray(new File(imgAddr));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String s1 = Base64Util.encode(b1);
+        String s2 = data.getData().split(",")[1];
+
+        System.out.println("bbbbbbbbbb"+s1.getBytes());
+        MatchRequest req1 = new MatchRequest(s1, "BASE64");
+        MatchRequest req2 = new MatchRequest(s2, "BASE64");
+
+
+        List<MatchRequest> list = Lists.newArrayList();
+        list.add(req1);
+        list.add(req2);
+
+       /* JSONObject rs = client.match(list);*/
+
+        JSONObject rs = client.match(list);
+        System.out.println(rs);
+        if(rs.getString("error_msg").equals("SUCCESS") == true) {
+            JSONObject result = rs.getJSONObject("result");
+            Double score = result.getDouble("score");
+            if (score >= 80.0) {
+                SignRecords signRecords = new SignRecords(name);
+                if (signRecordsRepo.save(signRecords) != null) {
+                    signMemberRepo.setIsStart(name);
+                    return name + "签到成功" + "  匹配度为:" + score;
+                } else {
+                    log.error(name + "签到失败");
+                    return name + "签到失败，请重试";
+                }
+            } else {
+                log.error(name + "签到失败");
+                return "不是本人，无法签到" + "  匹配度为:" + score;
+            }
+        }
+        else if(rs.getString("error_msg").equals("pic not has face")){
+            return "没有识别到人脸";
+        }
+        else{
+            return "其他识别问题";
         }
     }
 

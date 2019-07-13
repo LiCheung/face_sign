@@ -2,27 +2,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.twelve</groupId>
+	<artifactId>face_sign</artifactId>
+	<packaging>jar</packaging>
+	<!--<version>1.0-SNAPSHOT</version>-->
+
+	<version>0.0.1-SNAPSHOT</version>
+	<name>face_sign</name>
+	<description>Demo project for Spring Boot</description>
+
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>1.4.1.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.twelve</groupId>
-	<artifactId>face_sign</artifactId>
-	<packaging>war</packaging>
-	<version>1.0-SNAPSHOT</version>
-	<!--<version>0.0.1-SNAPSHOT</version>-->
-	<name>face_sign</name>
-	<url>http://maven.apache.org</url>
-	<description>Demo project for Spring Boot</description>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<warPackageName>FaceSign</warPackageName>
-		<tomcat.deploy.server>localTestServer</tomcat.deploy.server>
-		<tomcat.deploy.serverUrl>http://211.159.187.251:8080/manager/text</tomcat.deploy.serverUrl>
 	</properties>
 
 
@@ -53,7 +52,7 @@
 
 
 		<!--移掉内嵌服务器-->
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
@@ -62,7 +61,7 @@
 					<artifactId>spring-boot-starter-tomcat</artifactId>
 				</exclusion>
 			</exclusions>
-		</dependency>
+		</dependency>-->
 
 		<dependency>
 			<groupId>net.sourceforge.jexcelapi</groupId>
@@ -71,10 +70,10 @@
 		</dependency>
 
 
-		<dependency>
+		<!--<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
-		</dependency>
+		</dependency>-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
@@ -121,33 +120,55 @@
 			<artifactId>javax.servlet-api</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>LATEST</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-freemarker</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.baidu.aip</groupId>
+			<artifactId>java-sdk</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
+	<!--	 https://mvnrepository.com/artifact/org.springframework/org.springframework.web
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>org.springframework.web</artifactId>
+			<version>3.1.0.RELEASE</version>
+		</dependency>
+-->
+
 	</dependencies>
 
-	<profiles>
-		<profile>
-			<id>deploy2production</id>
-			<properties>
-				<tomcat.deploy.server>productionServer</tomcat.deploy.server>
-				<tomcat.deploy.serverUrl>http://211.159.187.251:8080/manager/text</tomcat.deploy.serverUrl>
-			</properties>
-		</profile>
-	</profiles>
-
 	<build>
-		<finalName>${warPackageName}</finalName>
+		<finalName>FaceSign</finalName>
 		<plugins>
 			<plugin>
-				<groupId>org.apache.tomcat.maven</groupId>
-				<artifactId>tomcat7-maven-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<server>${tomcat.deploy.server}</server>
-					<url>${tomcat.deploy.serverUrl}</url>
-					<path>/${warPackageName}</path>
-					<!--<username>root</username>-->
-					<!--<password>980325</password>-->
-					<!--<update>true</update>-->
-				</configuration>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>

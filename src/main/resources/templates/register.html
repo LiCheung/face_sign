@@ -2,6 +2,7 @@
 <html lang="en" ng-app="myApp" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"/>
     <meta charset="UTF-8"/>
     <meta http-equiv="x-ua-compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
@@ -16,15 +17,15 @@
 
 <div style="height: 100px;width: 200%"></div>
 
-<form name="form" class="col-md-4 col-md-offset-4" th:action="@{/member/register}" method="POST"> <!-- 3 -->
+<form name="form" class="col-md-4 col-md-offset-4" th:action="@{/member/register}" method="POST" enctype="multipart/form-data"> <!-- 3 -->
     <div class="form-group">
         <input type="text" id="用户名" class="form-control" name="names" placeholder="用户名"/>
     </div>
     <div class="form-group">
-        <input type="text" id="newpwd1" class="form-control" name="newpwd1" placeholder="密码"/>
+        <input type="password" id="newpwd1" class="form-control" name="newpwd1" placeholder="密码"/>
     </div>
     <div class="form-group">
-        <input type="text" id="newpwd2" class="form-control" name="newpwd2"
+        <input type="password" id="newpwd2" class="form-control" name="newpwd2"
                placeholder="再次输入密码"/>
     </div>
     <div class="form-group">
@@ -35,9 +36,91 @@
         <input type="text" id="grade" class="form-control" name="grade"
                placeholder="年级"/>
     </div>
+
+    <p>选择文件:
+        <input type="file" id="picture" name="fileName"/></p>
+
+    <!--    <div class="form-group">-->
+    <!--        <input type="file" name="file" id="picAddr" value="" accept="image/jpeg,image/png,image/jpg" multiple="" onchange="previewImg(this);">-->
+    <!--    </div>-->
     <div class="form-group">
         <button type="submit" id="register" class="btn btn-primary">提交</button>
     </div>
 </form>
+
+
+<!--    <script>-->
+<!--    function previewImg(input,imgObj) {-->
+<!--        var maxsize = 300 * 1024;//超过300k进行压缩-->
+<!--        //是否支持-->
+<!--        if (typeof FileReader === 'undefined') {-->
+<!--            alert("抱歉，你的浏览器不支持 FileReader，请使用现代浏览器操作！");-->
+<!--            input.setAttribute('disabled','disabled');-->
+<!--            }-->
+<!--        if(input.files && input.files[0]){-->
+<!--            var file = input.files[0],-->
+<!--            reader = new FileReader();-->
+<!--            if(file.type !== 'image/jpeg' && file.type !== 'image/png' && file.type !== 'image/gif') {-->
+<!--                alert('不是有效的图片文件!');-->
+<!--                return;-->
+<!--            }-->
+<!--            reader.readAsDataURL(file);-->
+<!--            reader.onload = function(e){-->
+<!--                var result=this.result;//获取到base64的图片-->
+<!--                //大于300k图片进行压缩-->
+<!--                if(result.length >= maxsize){-->
+<!--                    getId(imgObj).setAttribute('src',result);//回显图片-->
+<!--                    getId(imgObj).classList.add('on');//回显图片-->
+<!--                    //var img = new Image();-->
+<!--                    //img.src = result; //result是 传送过来的图片文件-->
+<!--                    lrz(input.files[0], {-->
+<!--                        width: 200-->
+<!--                    })-->
+<!--                    .then(function (rst) {-->
+<!--                    //压缩后异步上传-->
+<!--                    $.ajax({-->
+<!--                        url : url-->
+<!--                        type: "POST",-->
+<!--                        data : {-->
+<!--                            image:rst.base64,//压缩后的base值-->
+<!--                        },-->
+<!--                        dataType:"json",-->
+<!--                        cache:false,-->
+<!--                        async:false,-->
+<!--                        success : function(data) {-->
+<!--                            alert("成功");-->
+<!--                        },-->
+<!--                        error : function(){-->
+<!--                        }-->
+<!--                    });-->
+<!--                    })-->
+<!--                }else{-->
+<!--                    getId(imgObj).setAttribute('src',result);-->
+<!--                    getId(imgObj).classList.add('on');-->
+<!--                    var img = new Image();-->
+<!--                    img.src = result;-->
+<!--                    getId(imgObj).setAttribute('src',result);-->
+<!--                    getId(imgObj).classList.add('on');-->
+<!--                    $.ajax({-->
+<!--                        url :url,-->
+<!--                        type: "POST",-->
+<!--                        data : {-->
+<!--                        image:result//压缩后的base值-->
+<!--                        },-->
+<!--                        dataType:"json",-->
+<!--                        cache:false,-->
+<!--                        async:false,-->
+<!--                        success : function(data) {-->
+<!--                            alert("成功");-->
+<!--                        },-->
+<!--                        error : function(){-->
+<!--                        }-->
+<!--                    });-->
+<!--                }-->
+<!--            }-->
+<!--        }-->
+<!--    }-->
+<!--    </script>   -->
+
 </body>
 </html>

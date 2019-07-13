@@ -31,6 +31,7 @@ public class Member implements UserDetails { //1
     private Integer grade;
     private Integer isstart;
     private String pwd;
+    private String picAddr;
 
     @ManyToMany(mappedBy = "members")
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -73,5 +74,73 @@ public class Member implements UserDetails { //1
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Long getStuId() {
+        return stuId;
+    }
+
+    public void setStuId(Long stuId) {
+        this.stuId = stuId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
+    }
+
+    public Integer getIsstart() {
+        return isstart;
+    }
+
+    public void setIsstart(Integer isstart) {
+        this.isstart = isstart;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
+    }
+
+    public String getPicAddr() {
+        return picAddr;
+    }
+
+    public void setPicAddr(String picAddr) {
+        this.picAddr = picAddr;
+    }
+
+    public List<Roles> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Roles> roles) {
+        this.roles = roles;
     }
 }
